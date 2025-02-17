@@ -1,5 +1,7 @@
 using Students.Repository;
 using Students.Repository.Models;
+using Students.Web.Services.Students;
+using Students.Web.Services.Teachers;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<StudentsDbContext>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
 
 var app = builder.Build();
 

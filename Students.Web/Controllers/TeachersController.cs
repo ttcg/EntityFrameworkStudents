@@ -3,32 +3,33 @@ using Microsoft.AspNetCore.Mvc;
 using Students.Repository;
 using Students.Repository.Models;
 using Students.Web.Services.Students;
+using Students.Web.Services.Teachers;
 
 namespace Students.Web.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StudentsController(ILogger<StudentsController> logger, IStudentService studentService) : ControllerBase
+    public class TeachersController(ILogger<TeachersController> logger, ITeacherService teacherService) : ControllerBase
     {       
-        private readonly ILogger<StudentsController> _logger = logger;
+        private readonly ILogger<TeachersController> _logger = logger;
 
         [HttpGet]
-        public IEnumerable<Student> Get()
+        public IEnumerable<Teacher> Get()
         {
-            var result = studentService.GetStudents();
+            var result = teacherService.GetTeachers();
 
             if (result.IsSuccess)
             {
                 return result.Value;
             }
 
-            return Enumerable.Empty<Student>();
+            return Enumerable.Empty<Teacher>();
         }
 
-        [HttpGet("{studentId}")]
-        public IActionResult GetById([FromRoute] int studentId)
+        [HttpGet("{teacherId}")]
+        public IActionResult GetById([FromRoute] int teacherId)
         {
-            var result = studentService.GetStudentById(studentId);
+            var result = teacherService.GetTeacherById(teacherId);
 
             if (result.IsSuccess)
             {
