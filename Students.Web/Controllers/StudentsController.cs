@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Students.Repository;
 using Students.Repository.Models;
+using Students.Web.Models;
+using Students.Web.Services.Common;
 using Students.Web.Services.Students;
+using Students.Web.Services.Students.Dtos;
 
 namespace Students.Web.Controllers
 {
@@ -13,22 +14,25 @@ namespace Students.Web.Controllers
         private readonly ILogger<StudentsController> _logger = logger;
 
         [HttpGet]
-        public IEnumerable<Student> Get()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedList<Student>))]
+        public async Task<IActionResult> Get([FromQuery] GetStudentsModel model)
         {
-            var result = studentService.GetStudents();
+            var result = await studentService.GetStudents(new GetStudentsFilter(model.PageNumber, model.PageSize, model.SearchText));
 
             if (result.IsSuccess)
             {
-                return result.Value;
+                return Ok(result.Value);
             }
 
-            return Enumerable.Empty<Student>();
+            return Ok(new PagedList<Student>(Enumerable.Empty<Student>(), 0, 0, 0));
         }
 
         [HttpGet("{studentId}")]
-        public IActionResult GetById([FromRoute] int studentId)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Student))]
+        public async Task<IActionResult> GetById([FromRoute] int studentId)
         {
-            var result = studentService.GetStudentById(studentId);
+            var result = await studentService.GetStudentById(studentId);
 
             if (result.IsSuccess)
             {
