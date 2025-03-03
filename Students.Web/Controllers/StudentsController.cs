@@ -10,7 +10,7 @@ namespace Students.Web.Controllers
     [ApiController]
     [Route("[controller]")]
     public class StudentsController(ILogger<StudentsController> logger, IStudentService studentService) : ControllerBase
-    {       
+    {
         private readonly ILogger<StudentsController> _logger = logger;
 
         [HttpGet]
@@ -40,6 +40,47 @@ namespace Students.Web.Controllers
             }
 
             return NotFound(result.Error);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Student))]
+        public async Task<IActionResult> Create([FromBody] CreateStudentModel model)
+        {
+            var result = await studentService.CreateStudent(
+                new CreateStudentDto
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Gender = model.Gender
+                });
+
+            if (result.IsSuccess)
+            {
+                return CreatedAtAction(actionName: nameof(GetById), routeValues: new { studentId = result.Value.StudentId }, result.Value);
+            }
+
+            return BadRequest(result.Error);
+        }
+
+        [HttpPut("{studentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Student))]
+        public async Task<IActionResult> Update([FromRoute] int studentId, [FromBody] CreateStudentModel model)
+        {
+            var result = await studentService.UpdateStudent(
+                new UpdateStudentDto
+                {
+                    Id = studentId,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Gender = model.Gender
+                });
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return BadRequest(result.Error);
         }
     }
 }

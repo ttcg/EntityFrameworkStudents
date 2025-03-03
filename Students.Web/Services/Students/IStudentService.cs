@@ -12,5 +12,7 @@ namespace Students.Web.Services.Students
         Task<Result<PagedList<Student>>> GetStudents(GetStudentsFilter filter);
 
         Task<Result<Student>> CreateStudent(CreateStudentDto studentDto);
+
+        Task<Result<Student>> UpdateStudent(UpdateStudentDto studentDto);
     }
 }
