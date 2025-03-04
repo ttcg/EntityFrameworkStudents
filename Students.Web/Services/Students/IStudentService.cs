@@ -14,5 +14,7 @@ namespace Students.Web.Services.Students
         Task<Result<Student>> CreateStudent(CreateStudentDto studentDto);
 
         Task<Result<Student>> UpdateStudent(UpdateStudentDto studentDto);
+
+        Task<Result<bool>> DeleteStudent(int studentId);
     }
 }

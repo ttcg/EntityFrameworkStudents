@@ -24,6 +24,22 @@ namespace Students.Web.Services.Students
             return Result<Student>.Success(student.Entity);
         }
 
+        public async Task<Result<bool>> DeleteStudent(int studentId)
+        {
+            var student = await db.Students.FindAsync(studentId);
+
+            if (student == null)
+            {
+                return Result<bool>.Failure(StudentErrors.NotFound(studentId));
+            }
+
+            db.Remove(student);
+
+            await db.SaveChangesAsync();
+            
+            return Result<bool>.Success(true);
+        }
+
         public async Task<Result<Student>> GetStudentById(int studentId)
         {
             var student = await db.Students.AsNoTracking().SingleOrDefaultAsync(x => x.StudentId == studentId);

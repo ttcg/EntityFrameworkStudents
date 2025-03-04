@@ -82,5 +82,19 @@ namespace Students.Web.Controllers
 
             return BadRequest(result.Error);
         }
+
+        [HttpDelete("{studentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Delete([FromRoute] int studentId)
+        {
+            var result = await studentService.DeleteStudent(studentId);
+
+            if (result.IsSuccess)
+            {
+                return Ok();
+            }
+
+            return BadRequest(result.Error);
+        }
     }
 }
