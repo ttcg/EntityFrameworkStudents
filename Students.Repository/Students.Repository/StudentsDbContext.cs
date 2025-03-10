@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Students.Repository.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Students.Repository
 {
@@ -20,6 +15,31 @@ namespace Students.Repository
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
             DbPath = Path.Join(path, "students.db");
+
+            SavingChanges += SavingChangesHandler;
+        }
+
+        private void SavingChangesHandler(object? sender, SavingChangesEventArgs e)
+        {
+            foreach (var entry in ChangeTracker.Entries().Where(x => x.Entity is IHaveAuditData))
+            {
+                var auditedEntity = (IHaveAuditData)entry.Entity;
+                switch (entry.State)
+                {
+                    case EntityState.Modified:
+                        {
+                            auditedEntity.DateModified = DateTime.UtcNow;
+                            break;
+                        }
+                    case EntityState.Added:
+                        {
+                            auditedEntity.DateModified = DateTime.UtcNow;
+                            auditedEntity.DateCreated = auditedEntity.DateModified;
+                            break;
+                        }
+                }
+
+            }
         }
 
         // The following configures EF to create a Sqlite database file in the

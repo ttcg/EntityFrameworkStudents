@@ -4,7 +4,6 @@ using Students.Repository.Models;
 using Students.Web.Result;
 using Students.Web.Services.Common;
 using Students.Web.Services.Students.Dtos;
-using System.Text;
 
 namespace Students.Web.Services.Students
 {
@@ -85,14 +84,10 @@ namespace Students.Web.Services.Students
             student.LastName = studentDto.LastName;
             student.Gender = studentDto.Gender;
 
+            db.Entry(student).State = EntityState.Modified;
             await db.SaveChangesAsync();
 
             return Result<Student>.Success(student);
-
-
-
-
-
         }
     }
 }
