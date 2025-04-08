@@ -11,6 +11,8 @@ namespace Students.Repository.Models
 
         public DateTime DateModified { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public List<Enrolment> Enrolments { get; set; } = [];
     }
 
     public enum Gender

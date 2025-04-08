@@ -54,13 +54,26 @@ namespace Students.Repository
         {
             SeedStudents(modelBuilder);
             SeedTeachers(modelBuilder);
+            SeedEnrolments(modelBuilder);
         }
 
         private static void SeedStudents(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Student>().HasData(
-                            new Student { StudentId = 1, FirstName = "John", LastName = "Smith", Gender = Gender.Male },
-                            new Student { StudentId = 2, FirstName = "Aaron", LastName = "Hanwell", Gender = Gender.Male },
+                            new Student
+                            {
+                                StudentId = 1,
+                                FirstName = "John",
+                                LastName = "Smith",
+                                Gender = Gender.Male
+                            },
+                            new Student
+                            {
+                                StudentId = 2,
+                                FirstName = "Aaron",
+                                LastName = "Hanwell",
+                                Gender = Gender.Male
+                            },
                             new Student { StudentId = 3, FirstName = "Quest", LastName = "Ball", Gender = Gender.Male },
                             new Student { StudentId = 4, FirstName = "Caroline", LastName = "Turner", Gender = Gender.Female },
                             new Student { StudentId = 5, FirstName = "David", LastName = "Smith", Gender = Gender.Male },
@@ -79,6 +92,40 @@ namespace Students.Repository
                 new Teacher { TeacherId = 4, FirstName = "Zac", LastName = "Cooke" },
                 new Teacher { TeacherId = 5, FirstName = "Robbie", LastName = "Fox" }
                 );
+        }
+
+        private static void SeedEnrolments(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Enrolment>().HasData(
+                new Enrolment
+                {
+                    Course = Course.Bio,
+                    EnrolmentId = 1,
+                    Status = EnrolmentStatus.InProgress,
+                    StudentId = 1
+                },
+                new Enrolment
+                {
+                    Course = Course.Maths,
+                    EnrolmentId = 2,
+                    Status = EnrolmentStatus.InProgress,
+                    StudentId = 1
+                },
+                new Enrolment
+                {
+                    Course = Course.Maths,
+                    EnrolmentId = 3,
+                    Status = EnrolmentStatus.Withdrawn,
+                    StudentId = 2
+                },
+                new Enrolment
+                {
+                    Course = Course.Chemistry,
+                    EnrolmentId = 4,
+                    Status = EnrolmentStatus.InProgress,
+                    StudentId = 2
+                }
+            );
         }
     }
 }

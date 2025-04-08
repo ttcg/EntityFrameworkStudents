@@ -4,6 +4,7 @@ using Students.Web.Models;
 using Students.Web.Services.Common;
 using Students.Web.Services.Students;
 using Students.Web.Services.Students.Dtos;
+using Students.Web.ViewModels;
 
 namespace Students.Web.Controllers
 {
@@ -29,14 +30,14 @@ namespace Students.Web.Controllers
 
         [HttpGet("{studentId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Student))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentViewModel))]
         public async Task<IActionResult> GetById([FromRoute] int studentId)
         {
             var result = await studentService.GetStudentById(studentId);
 
             if (result.IsSuccess)
             {
-                return Ok(result.Value);
+                return Ok(new StudentViewModel(result.Value));
             }
 
             return NotFound(result.Error);

@@ -41,7 +41,9 @@ namespace Students.Web.Services.Students
 
         public async Task<Result<Student>> GetStudentById(int studentId)
         {
-            var student = await db.Students.AsNoTracking().SingleOrDefaultAsync(x => x.StudentId == studentId);
+            var student = await db.Students.AsNoTracking()
+                .Include(x => x.Enrolments)
+                .SingleOrDefaultAsync(x => x.StudentId == studentId);
 
             if (student == null)
             {
