@@ -97,5 +97,47 @@ namespace Students.Web.Controllers
 
             return BadRequest(result.Error);
         }
+
+        [HttpPost("{studentId}/courses/{course}/enrol")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EnrolmentViewModel))]
+        public async Task<IActionResult> Enrol([FromRoute] int studentId, [FromRoute] Course course)
+        {
+            var result = await studentService.EnrolCourse(studentId, course);
+
+            if (result.IsSuccess)
+            {
+                return Ok(new EnrolmentViewModel(result.Value));
+            }
+
+            return BadRequest(result.Error);
+        }
+
+        [HttpPost("{studentId}/courses/{course}/complete")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EnrolmentViewModel))]
+        public async Task<IActionResult> CompleteEnrolment([FromRoute] int studentId, [FromRoute] Course course)
+        {
+            var result = await studentService.CompleteCourse(studentId, course);
+
+            if (result.IsSuccess)
+            {
+                return Ok(new EnrolmentViewModel(result.Value));
+            }
+
+            return BadRequest(result.Error);
+        }
+
+        [HttpPost("{studentId}/courses/{course}/withdraw")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EnrolmentViewModel))]
+        public async Task<IActionResult> WithdrawEnrolment([FromRoute] int studentId, [FromRoute] Course course)
+        {
+            var result = await studentService.WithdrawCourse(studentId, course);
+
+            if (result.IsSuccess)
+            {
+                return Ok(new EnrolmentViewModel(result.Value));
+            }
+
+            return BadRequest(result.Error);
+        }
     }
 }

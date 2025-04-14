@@ -16,5 +16,11 @@ namespace Students.Web.Services.Students
         Task<Result<Student>> UpdateStudent(UpdateStudentDto studentDto);
 
         Task<Result<bool>> DeleteStudent(int studentId);
+
+        Task<Result<Enrolment>> EnrolCourse(int studentId, Course course);
+
+        Task<Result<Enrolment>> CompleteCourse(int studentId, Course course);
+
+        Task<Result<Enrolment>> WithdrawCourse(int studentId, Course course);
     }
 }

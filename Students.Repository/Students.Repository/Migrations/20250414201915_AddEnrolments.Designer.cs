@@ -11,7 +11,7 @@ using Students.Repository;
 namespace Students.Repository.Migrations
 {
     [DbContext(typeof(StudentsDbContext))]
-    [Migration("20250408195632_AddEnrolments")]
+    [Migration("20250414201915_AddEnrolments")]
     partial class AddEnrolments
     {
         /// <inheritdoc />
@@ -45,7 +45,7 @@ namespace Students.Repository.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Enrolment");
+                    b.ToTable("Enrolments");
 
                     b.HasData(
                         new

@@ -2,6 +2,7 @@ using Students.Repository;
 using Students.Repository.Models;
 using Students.Web.Services.Students;
 using Students.Web.Services.Teachers;
+using Students.Web.Swagger;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -16,7 +17,11 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var schemaHelper = new SwaggerSchemaHelper();
+    options.CustomSchemaIds(type => schemaHelper.GetSchemaId(type));
+});
 
 builder.Services.AddDbContext<StudentsDbContext>();
 builder.Services.AddScoped<IStudentService, StudentService>();

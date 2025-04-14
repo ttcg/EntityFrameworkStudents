@@ -42,7 +42,7 @@ namespace Students.Repository.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Enrolment");
+                    b.ToTable("Enrolments");
 
                     b.HasData(
                         new

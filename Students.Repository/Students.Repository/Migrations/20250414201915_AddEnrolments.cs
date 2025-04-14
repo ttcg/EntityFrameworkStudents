@@ -14,7 +14,7 @@ namespace Students.Repository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Enrolment",
+                name: "Enrolments",
                 columns: table => new
                 {
                     EnrolmentId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -22,14 +22,14 @@ namespace Students.Repository.Migrations
                     StudentId = table.Column<int>(type: "INTEGER", nullable: false),
                     Course = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    DateModified = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    DateModified = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: DateTime.UtcNow),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: DateTime.UtcNow)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrolment", x => x.EnrolmentId);
+                    table.PrimaryKey("PK_Enrolments", x => x.EnrolmentId);
                     table.ForeignKey(
-                        name: "FK_Enrolment_Students_StudentId",
+                        name: "FK_Enrolments_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "StudentId",
@@ -37,7 +37,7 @@ namespace Students.Repository.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Enrolment",
+                table: "Enrolments",
                 columns: new[] { "EnrolmentId", "Course", "DateCreated", "DateModified", "Status", "StudentId" },
                 values: new object[,]
                 {
@@ -48,8 +48,8 @@ namespace Students.Repository.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrolment_StudentId",
-                table: "Enrolment",
+                name: "IX_Enrolments_StudentId",
+                table: "Enrolments",
                 column: "StudentId");
         }
 
@@ -57,7 +57,7 @@ namespace Students.Repository.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Enrolment");
+                name: "Enrolments");
         }
     }
 }

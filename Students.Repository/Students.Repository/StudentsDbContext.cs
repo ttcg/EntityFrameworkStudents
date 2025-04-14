@@ -8,6 +8,7 @@ namespace Students.Repository
     {
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Enrolment> Enrolments { get; set; }
 
         public string DbPath { get; }
 

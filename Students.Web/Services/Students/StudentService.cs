@@ -37,7 +37,7 @@ namespace Students.Web.Services.Students
             await db.SaveChangesAsync();
             
             return Result<bool>.Success(true);
-        }
+        }        
 
         public async Task<Result<Student>> GetStudentById(int studentId)
         {
@@ -90,6 +90,89 @@ namespace Students.Web.Services.Students
             await db.SaveChangesAsync();
 
             return Result<Student>.Success(student);
+        }
+
+        public async Task<Result<Enrolment>> EnrolCourse(int studentId, Course course)
+        {
+            var student = await db.Students
+                .SingleOrDefaultAsync(x => x.StudentId == studentId);
+
+            if (student == null)
+            {
+                return Result<Enrolment>.Failure(StudentErrors.NotFound(studentId));
+            }
+
+            var statusList = new List<EnrolmentStatus> { EnrolmentStatus.Completed, EnrolmentStatus.InProgress };
+
+            var existingEnrolment = await db.Enrolments.SingleOrDefaultAsync(x =>
+                x.StudentId == student.StudentId
+                && x.Course == course
+                && statusList.Contains(x.Status));
+
+            if (existingEnrolment != null)
+            {
+                return Result<Enrolment>.Failure(StudentErrors.EnrolmentAlreadyExist(studentId, course));
+            }
+
+            var enrolment = await db.AddAsync(Enrolment.Create(student, course));
+
+            await db.SaveChangesAsync();
+
+            return Result<Enrolment>.Success(enrolment.Entity);
+        }
+
+        public async Task<Result<Enrolment>> CompleteCourse(int studentId, Course course)
+        {
+            var student = await db.Students
+                .SingleOrDefaultAsync(x => x.StudentId == studentId);
+
+            if (student == null)
+            {
+                return Result<Enrolment>.Failure(StudentErrors.NotFound(studentId));
+            }
+
+            var existingEnrolment = await db.Enrolments.SingleOrDefaultAsync(x =>
+                x.StudentId == student.StudentId
+                && x.Course == course
+                && x.Status == EnrolmentStatus.InProgress);
+
+            if (existingEnrolment == null)
+            {
+                return Result<Enrolment>.Failure(StudentErrors.EnrolmentNotFound(studentId, course));
+            }
+
+            existingEnrolment.Complete();
+
+            await db.SaveChangesAsync();
+
+            return Result<Enrolment>.Success(existingEnrolment);
+        }
+
+        public async Task<Result<Enrolment>> WithdrawCourse(int studentId, Course course)
+        {
+            var student = await db.Students
+                .SingleOrDefaultAsync(x => x.StudentId == studentId);
+
+            if (student == null)
+            {
+                return Result<Enrolment>.Failure(StudentErrors.NotFound(studentId));
+            }
+
+            var existingEnrolment = await db.Enrolments.SingleOrDefaultAsync(x =>
+                x.StudentId == student.StudentId
+                && x.Course == course
+                && x.Status == EnrolmentStatus.InProgress);
+
+            if (existingEnrolment == null)
+            {
+                return Result<Enrolment>.Failure(StudentErrors.EnrolmentNotFound(studentId, course));
+            }
+
+            existingEnrolment.Withdraw();
+
+            await db.SaveChangesAsync();
+
+            return Result<Enrolment>.Success(existingEnrolment);
         }
     }
 }
