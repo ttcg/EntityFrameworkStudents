@@ -52,7 +52,14 @@ namespace Students.Web.Controllers
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Gender = model.Gender
+                    Gender = model.Gender,
+                    Addresses = model.AddressList?.Select(x => new CreateStudentDto.AddressDto
+                    {
+                        City = x.City,
+                        IsCurrent = x.IsCurrent,
+                        Line1 = x.Line1,
+                        Line2 = x.Line2
+                    }).ToList() ?? []
                 });
 
             if (result.IsSuccess)

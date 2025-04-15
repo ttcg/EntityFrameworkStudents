@@ -15,7 +15,14 @@ namespace Students.Web.Services.Students
             {
                 FirstName = studentDto.FirstName,
                 LastName = studentDto.LastName,
-                Gender = studentDto.Gender
+                Gender = studentDto.Gender,
+                Addresses = studentDto.Addresses?.Select(x => new Address
+                {
+                    City = x.City,
+                    IsCurrent = x.IsCurrent,
+                    Line1 = x.Line1,
+                    Line2 = x.Line2
+                }).ToList() ?? []
             });
 
             await db.SaveChangesAsync();

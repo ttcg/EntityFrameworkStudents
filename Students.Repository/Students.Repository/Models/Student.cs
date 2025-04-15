@@ -13,6 +13,8 @@ namespace Students.Repository.Models
         public DateTime DateCreated { get; set; }
 
         public List<Enrolment> Enrolments { get; set; } = [];
+
+        public List<Address> Addresses { get; set; } = [];
     }
 
     public enum Gender
