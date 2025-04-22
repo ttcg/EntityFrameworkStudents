@@ -58,7 +58,8 @@ namespace Students.Web.Controllers
                         City = x.City,
                         IsCurrent = x.IsCurrent,
                         Line1 = x.Line1,
-                        Line2 = x.Line2
+                        Line2 = x.Line2,
+                        Country = x.Country
                     }).ToList() ?? []
                 });
 

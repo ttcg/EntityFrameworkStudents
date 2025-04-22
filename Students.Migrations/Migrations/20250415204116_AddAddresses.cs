@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Students.Repository.Migrations
+namespace Students.Migrations.Migrations
 {
     /// <inheritdoc />
     public partial class AddAddresses : Migration

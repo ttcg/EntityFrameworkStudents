@@ -22,6 +22,7 @@ namespace Students.Web.Models
             public string Line1 { get; set; }
             public string? Line2 { get; set; }
             public bool IsCurrent { get; set; }
+            public string Country { get; set; }
         }
     }
 }

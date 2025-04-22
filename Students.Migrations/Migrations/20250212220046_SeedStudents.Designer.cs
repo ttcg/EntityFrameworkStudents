@@ -7,7 +7,7 @@ using Students.Repository;
 
 #nullable disable
 
-namespace Students.Repository.Migrations
+namespace Students.Migrations.Migrations
 {
     [DbContext(typeof(StudentsDbContext))]
     [Migration("20250212220046_SeedStudents")]

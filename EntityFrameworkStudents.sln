@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.Web", "Students.Web\Students.Web.csproj", "{49081850-1DDE-4BF8-8868-2B8D99C3D5F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.Repository", "Students.Repository\Students.Repository\Students.Repository.csproj", "{5D7B9305-7736-43D2-B9AE-733008DE0FBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Students.Repository", "Students.Repository\Students.Repository\Students.Repository.csproj", "{5D7B9305-7736-43D2-B9AE-733008DE0FBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Students.Migrations", "Students.Migrations\Students.Migrations.csproj", "{D61E3308-FCA5-48F3-B459-9C0236814939}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5D7B9305-7736-43D2-B9AE-733008DE0FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D7B9305-7736-43D2-B9AE-733008DE0FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D7B9305-7736-43D2-B9AE-733008DE0FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D61E3308-FCA5-48F3-B459-9C0236814939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D61E3308-FCA5-48F3-B459-9C0236814939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D61E3308-FCA5-48F3-B459-9C0236814939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D61E3308-FCA5-48F3-B459-9C0236814939}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Students.Repository.Migrations
+namespace Students.Migrations.Migrations
 {
     /// <inheritdoc />
     public partial class AddEnrolments : Migration

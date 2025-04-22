@@ -8,7 +8,7 @@ using Students.Repository;
 
 #nullable disable
 
-namespace Students.Repository.Migrations
+namespace Students.Migrations.Migrations
 {
     [DbContext(typeof(StudentsDbContext))]
     [Migration("20250414201915_AddEnrolments")]
