@@ -2,7 +2,7 @@
 {
     public class GetStudentsFilter
     {
-        public GetStudentsFilter(int pageNumber, int pageSize, string? searchText)
+        public GetStudentsFilter(int pageNumber, int pageSize, string? searchText = null)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;

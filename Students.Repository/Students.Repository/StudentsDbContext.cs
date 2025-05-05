@@ -6,6 +6,9 @@ namespace Students.Repository
 {
     public class StudentsDbContext : DbContext
     {
+        public StudentsDbContext(DbContextOptions<StudentsDbContext> options) : base(options)
+        { }
+
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Enrolment> Enrolments { get; set; }

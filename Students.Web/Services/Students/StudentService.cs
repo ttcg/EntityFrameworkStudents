@@ -51,6 +51,7 @@ namespace Students.Web.Services.Students
         {
             var student = await db.Students.AsNoTracking()
                 .Include(x => x.Enrolments)
+                .Include(x => x.Addresses)
                 .SingleOrDefaultAsync(x => x.StudentId == studentId);
 
             if (student == null)
