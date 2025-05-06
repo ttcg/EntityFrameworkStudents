@@ -2,15 +2,15 @@ using Students.Repository;
 using Students.Repository.Models;
 using Students.Web.Services.Students;
 
-namespace Students.IntegrationTests.Students
+namespace Students.IntegrationTests.Students.Services
 {
-    public class WhenGettingStudentById : IClassFixture<IntegrationTestFactory>
+    public class WhenDeletingStudent : IClassFixture<IntegrationTestFactory>
     {
         private IStudentService _studentService;
         private StudentsDbContext _db;
         private Student _student;
 
-        public WhenGettingStudentById(IntegrationTestFactory factory)
+        public WhenDeletingStudent(IntegrationTestFactory factory)
         {
             _studentService = new StudentService(factory.Db);
             _db = factory.Db;
@@ -34,26 +34,22 @@ namespace Students.IntegrationTests.Students
         }
 
         [Fact]
-        public async Task ShouldGetStudentData()
-        {                
-            var result = await _studentService.GetStudentById(_student.StudentId);
+        public async Task ShouldDeleteStudentData()
+        {
+            var result = await _studentService.DeleteStudent(_student.StudentId);
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
-            var student = result.Value;
-            Assert.Equal(student.FirstName, _student.FirstName);
-            Assert.Equal(student.LastName, _student.LastName);
-            Assert.Equal(student.Gender, _student.Gender);
-            Assert.Equal(student.StudentId, _student.StudentId);
-            Assert.True(student.Addresses.Any());
+            var student = await _db.Students.FindAsync(_student.StudentId);
+            Assert.Null(student);
         }
 
         [Fact]
         public async Task ShouldThrowNotFoundError()
-        {            
-            var result = await _studentService.GetStudentById(999);
+        {
+            var result = await _studentService.DeleteStudent(999);
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal("Students.NotFound", result.Error.Code);
+            Assert.Equal(StudentErrors.Constants.NotFound, result.Error.Code);
         }
     }
 }

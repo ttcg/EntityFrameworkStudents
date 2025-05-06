@@ -1,10 +1,8 @@
 using Students.Repository;
 using Students.Repository.Models;
 using Students.Web.Services.Students;
-using Students.Web.Services.Students.Dtos;
-using Xunit;
 
-namespace Students.IntegrationTests.Students
+namespace Students.IntegrationTests.Students.Services
 {
     public class WhenEnrollingStudent : IClassFixture<IntegrationTestFactory>
     {
@@ -29,7 +27,7 @@ namespace Students.IntegrationTests.Students
                         City = "London",
                         Country = "GB",
                         IsCurrent = true
-                    }                   
+                    }
                 ],
                 Enrolments = [
                     new Enrolment()
@@ -54,7 +52,7 @@ namespace Students.IntegrationTests.Students
 
         [Fact]
         public async Task ShouldEnrolCourseForWithdrawn()
-        {            
+        {
             var result = await _studentService.EnrolCourse(_student1.StudentId, Course.Chemistry);
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
@@ -82,7 +80,7 @@ namespace Students.IntegrationTests.Students
             var result = await _studentService.EnrolCourse(_student1.StudentId, Course.Maths);
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal("Students.EnrolmentAlreadyExist", result.Error.Code);
+            Assert.Equal(StudentErrors.Constants.EnrolmentAlreadyExist, result.Error.Code);
         }
 
         [Fact]
@@ -91,7 +89,7 @@ namespace Students.IntegrationTests.Students
             var result = await _studentService.EnrolCourse(_student1.StudentId, Course.Physics);
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal("Students.EnrolmentAlreadyExist", result.Error.Code);
+            Assert.Equal(StudentErrors.Constants.EnrolmentAlreadyExist, result.Error.Code);
         }
 
         [Fact]
@@ -100,7 +98,7 @@ namespace Students.IntegrationTests.Students
             var result = await _studentService.EnrolCourse(999, Course.Maths);
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal("Students.NotFound", result.Error.Code);
+            Assert.Equal(StudentErrors.Constants.NotFound, result.Error.Code);
         }
     }
 }

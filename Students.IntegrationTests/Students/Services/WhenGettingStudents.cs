@@ -3,7 +3,7 @@ using Students.Repository.Models;
 using Students.Web.Services.Students;
 using Students.Web.Services.Students.Dtos;
 
-namespace Students.IntegrationTests.Students
+namespace Students.IntegrationTests.Students.Services
 {
     [Collection("Database collection")]
     public class WhenGettingStudents : BaseIntegrationTest, IClassFixture<IntegrationTestFactory>

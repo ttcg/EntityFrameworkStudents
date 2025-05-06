@@ -3,7 +3,7 @@ using Students.Repository.Models;
 using Students.Web.Services.Students;
 using Students.Web.Services.Students.Dtos;
 
-namespace Students.IntegrationTests.Students
+namespace Students.IntegrationTests.Students.Services
 {
     public class WhenUpdatingStudent : IClassFixture<IntegrationTestFactory>
     {
@@ -36,7 +36,7 @@ namespace Students.IntegrationTests.Students
 
         [Fact]
         public async Task ShouldUpdateStudentData()
-        {           
+        {
             var dto = new UpdateStudentDto
             {
                 Id = _student.StudentId,
@@ -67,7 +67,7 @@ namespace Students.IntegrationTests.Students
             var result = await _studentService.UpdateStudent(dto);
             Assert.NotNull(result);
             Assert.True(result.IsFailure);
-            Assert.Equal("Students.NotFound", result.Error.Code);
+            Assert.Equal(StudentErrors.Constants.NotFound, result.Error.Code);
         }
     }
 }
