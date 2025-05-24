@@ -1,9 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using Students.Repository;
-using Students.Repository.Models;
 using Students.Web.Services.Students;
 using Students.Web.Services.Teachers;
 using Students.Web.Swagger;
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +22,16 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => schemaHelper.GetSchemaId(type));
 });
 
-builder.Services.AddDbContext<StudentsDbContext>();
+builder.Services.AddDbContext<StudentsDbContext>(options =>
+{
+    var folder = Environment.SpecialFolder.LocalApplicationData;
+    var path = Environment.GetFolderPath(folder);
+    
+    var connectionString = Path.Join(path, "students.db"); ;
+
+    options.UseSqlite($"Data Source={connectionString}", x => x.MigrationsAssembly("Students.Migrations"));
+});
+
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 

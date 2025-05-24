@@ -1,28 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Students.Repository.Models;
 
 namespace Students.Repository
 {
     public class StudentsDbContext : DbContext
     {
-        public StudentsDbContext(DbContextOptions<StudentsDbContext> options) : base(options)
-        { }
+        public StudentsDbContext(DbContextOptions<StudentsDbContext> options)
+            : base(options)
+        {
+            SavingChanges += SavingChangesHandler;
+        }
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Enrolment> Enrolments { get; set; }
-
-        public string DbPath { get; }
-
-        public StudentsDbContext()
-        {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = Path.Join(path, "students.db");
-
-            SavingChanges += SavingChangesHandler;
-        }
+        public DbSet<Enrolment> Enrolments { get; set; }   
 
         private void SavingChangesHandler(object? sender, SavingChangesEventArgs e)
         {
@@ -47,12 +38,10 @@ namespace Students.Repository
             }
         }
 
-        // The following configures EF to create a Sqlite database file in the
-        // special "local" folder for your platform.
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}", x => x.MigrationsAssembly("Students.Migrations"))
-            .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, Microsoft.Extensions.Logging.LogLevel.Information)
-            .EnableSensitiveDataLogging();
+            => options.LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, Microsoft.Extensions.Logging.LogLevel.Information)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

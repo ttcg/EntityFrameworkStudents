@@ -13,13 +13,14 @@ namespace Students.IntegrationTests
     public class IntegrationTestFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         public StudentsDbContext Db { get; private set; }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
                 var dbContextDescriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                        typeof(IDbContextOptionsConfiguration<StudentsDbContext>));
+                d => d.ServiceType ==
+                    typeof(IDbContextOptionsConfiguration<StudentsDbContext>));
 
                 services.Remove(dbContextDescriptor);
 
@@ -29,7 +30,7 @@ namespace Students.IntegrationTests
 
                 services.Remove(dbConnectionDescriptor);
 
-                // Create open SqliteConnection so EF won't automatically close it.
+                //Create open SqliteConnection so EF won't automatically close it.
                 services.AddSingleton<DbConnection>(container =>
                 {
                     var connection = new SqliteConnection("DataSource=:memory:");
@@ -46,19 +47,21 @@ namespace Students.IntegrationTests
             });
 
             builder.UseEnvironment("Development");
+
+            base.ConfigureWebHost(builder);
         }
 
         public async Task InitializeAsync()
         {
             var dbContext = Services.CreateScope().ServiceProvider.GetRequiredService<StudentsDbContext>();
-            dbContext.Database.OpenConnection();
+
             await dbContext.Database.EnsureCreatedAsync();
 
-            Db = dbContext;            
+            Db = dbContext;
         }
 
         Task IAsyncLifetime.DisposeAsync()
-        {           
+        {
             return Task.CompletedTask;
         }
 
@@ -69,10 +72,4 @@ namespace Students.IntegrationTests
             Db.Database.ExecuteSql($"DELETE FROM Students");
         }
     }
-}
-
-[CollectionDefinition("Database collection")]
-public class DatabaseCollection : ICollectionFixture<IntegrationTestFactory>
-{
-    // Class used only for Collection Definition
 }
