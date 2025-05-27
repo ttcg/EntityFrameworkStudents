@@ -24,12 +24,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddDbContext<StudentsDbContext>(options =>
 {
-    var folder = Environment.SpecialFolder.LocalApplicationData;
-    var path = Environment.GetFolderPath(folder);
-    
-    var connectionString = Path.Join(path, "students.db"); ;
+    var connectionString = @"Server=(localdb)\mssqllocaldb;Database=EfCoreStudentsDb;Trusted_Connection=True;";
 
-    options.UseSqlite($"Data Source={connectionString}", x => x.MigrationsAssembly("Students.Migrations"));
+    options.UseSqlServer(connectionString, x => x.MigrationsAssembly("Students.Migrations"));
 });
 
 builder.Services.AddScoped<IStudentService, StudentService>();

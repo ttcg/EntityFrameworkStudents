@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Students.Repository;
@@ -31,19 +30,19 @@ namespace Students.IntegrationTests
                 services.Remove(dbConnectionDescriptor);
 
                 //Create open SqliteConnection so EF won't automatically close it.
-                services.AddSingleton<DbConnection>(container =>
-                {
-                    var connection = new SqliteConnection("DataSource=:memory:");
-                    connection.Open();
+                //services.AddSingleton<DbConnection>(container =>
+                //{
+                //    var connection = new SqliteConnection("DataSource=:memory:");
+                //    connection.Open();
 
-                    return connection;
-                });
+                //    return connection;
+                //});
 
-                services.AddDbContext<StudentsDbContext>((container, options) =>
-                {
-                    var connection = container.GetRequiredService<DbConnection>();
-                    options.UseSqlite(connection);
-                });
+                //services.AddDbContext<StudentsDbContext>((container, options) =>
+                //{
+                //    var connection = container.GetRequiredService<DbConnection>();
+                //    options.UseSqlite(connection);
+                //});
             });
 
             builder.UseEnvironment("Development");
