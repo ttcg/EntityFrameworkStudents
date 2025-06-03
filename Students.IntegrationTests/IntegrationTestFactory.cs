@@ -1,48 +1,27 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Students.Repository;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
-using Students.IntegrationTests;
+using Testcontainers.MsSql;
 
 namespace Students.IntegrationTests
 {
     public class IntegrationTestFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
+        private readonly MsSqlContainer _container = new MsSqlBuilder().Build();
+
         public StudentsDbContext Db { get; private set; }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
-                var dbContextDescriptor = services.SingleOrDefault(
-                d => d.ServiceType ==
-                    typeof(IDbContextOptionsConfiguration<StudentsDbContext>));
-
-                services.Remove(dbContextDescriptor);
-
-                var dbConnectionDescriptor = services.SingleOrDefault(
-                    d => d.ServiceType ==
-                        typeof(DbConnection));
-
-                services.Remove(dbConnectionDescriptor);
-
-                //Create open SqliteConnection so EF won't automatically close it.
-                //services.AddSingleton<DbConnection>(container =>
-                //{
-                //    var connection = new SqliteConnection("DataSource=:memory:");
-                //    connection.Open();
-
-                //    return connection;
-                //});
-
-                //services.AddDbContext<StudentsDbContext>((container, options) =>
-                //{
-                //    var connection = container.GetRequiredService<DbConnection>();
-                //    options.UseSqlite(connection);
-                //});
+                var connectionString = _container.GetConnectionString();
+                services.Remove(services.SingleOrDefault(service => typeof(DbContextOptions<StudentsDbContext>) == service.ServiceType));
+                services.Remove(services.SingleOrDefault(service => typeof(DbConnection) == service.ServiceType));
+                services.AddDbContext<StudentsDbContext>((_, option) => option.UseSqlServer(connectionString));                
             });
 
             builder.UseEnvironment("Development");
@@ -52,6 +31,8 @@ namespace Students.IntegrationTests
 
         public async Task InitializeAsync()
         {
+            await _container.StartAsync();
+
             var dbContext = Services.CreateScope().ServiceProvider.GetRequiredService<StudentsDbContext>();
 
             await dbContext.Database.EnsureCreatedAsync();
@@ -59,9 +40,9 @@ namespace Students.IntegrationTests
             Db = dbContext;
         }
 
-        Task IAsyncLifetime.DisposeAsync()
+        async Task IAsyncLifetime.DisposeAsync()
         {
-            return Task.CompletedTask;
+            await _container.DisposeAsync();
         }
 
         public void ResetDatabase()
