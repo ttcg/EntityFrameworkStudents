@@ -1,19 +1,17 @@
-using Students.Repository;
 using Students.Repository.Models;
 using Students.Web.Services.Students;
 
 namespace Students.IntegrationTests.Students.Services
 {
-    public class WhenWithdrawingCourse : IClassFixture<IntegrationTestFactory>
+    [Collection(TestCollections.SqlIntegration)]
+    public class WhenWithdrawingCourse : BaseIntegrationTest
     {
         private IStudentService _studentService;
-        private StudentsDbContext _db;
         private Student _student1;
 
-        public WhenWithdrawingCourse(IntegrationTestFactory factory)
+        public WhenWithdrawingCourse(IntegrationTestFactory factory) : base(factory)
         {
             _studentService = new StudentService(factory.Db);
-            _db = factory.Db;
 
             _student1 = _db.Add(new Student
             {

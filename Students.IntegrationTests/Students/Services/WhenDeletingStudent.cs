@@ -1,19 +1,17 @@
-using Students.Repository;
 using Students.Repository.Models;
 using Students.Web.Services.Students;
 
 namespace Students.IntegrationTests.Students.Services
 {
-    public class WhenDeletingStudent : IClassFixture<IntegrationTestFactory>
+    [Collection(TestCollections.SqlIntegration)]
+    public class WhenDeletingStudent : BaseIntegrationTest
     {
         private IStudentService _studentService;
-        private StudentsDbContext _db;
         private Student _student;
 
-        public WhenDeletingStudent(IntegrationTestFactory factory)
+        public WhenDeletingStudent(IntegrationTestFactory factory) : base(factory)
         {
             _studentService = new StudentService(factory.Db);
-            _db = factory.Db;
 
             _student = _db.Add(new Student
             {

@@ -5,7 +5,8 @@ using System.Net.Http.Json;
 
 namespace Students.IntegrationTests.Students.Endpoints
 {
-    public class WhenCreatingStudent : BaseIntegrationTest, IClassFixture<IntegrationTestFactory>
+    [Collection(TestCollections.SqlIntegration)]
+    public class WhenCreatingStudent : BaseIntegrationTest
     {
         public WhenCreatingStudent(IntegrationTestFactory factory) : base(factory)
         {

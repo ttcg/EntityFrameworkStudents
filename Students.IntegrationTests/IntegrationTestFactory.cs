@@ -5,12 +5,15 @@ using Students.Repository;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.MsSql;
+using Respawn;
 
 namespace Students.IntegrationTests
 {
     public class IntegrationTestFactory : WebApplicationFactory<Program>, IAsyncLifetime
     {
         private readonly MsSqlContainer _container = new MsSqlBuilder().Build();
+        private Respawner _respawner = default!;
+        private DbConnection _dbConnection = default!;
 
         public StudentsDbContext Db { get; private set; }
 
@@ -36,20 +39,28 @@ namespace Students.IntegrationTests
             var dbContext = Services.CreateScope().ServiceProvider.GetRequiredService<StudentsDbContext>();
 
             await dbContext.Database.EnsureCreatedAsync();
-
             Db = dbContext;
+
+            _dbConnection = dbContext.Database.GetDbConnection();
+            await _dbConnection.OpenAsync();
+
+            _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions
+            {
+                DbAdapter = DbAdapter.SqlServer,
+                SchemasToInclude = ["dbo"],
+                TablesToIgnore = [new Respawn.Graph.Table("__EFMigrationsHistory")]
+            });
         }
 
         async Task IAsyncLifetime.DisposeAsync()
         {
+            await _dbConnection.CloseAsync();
             await _container.DisposeAsync();
         }
 
-        public void ResetDatabase()
+        public async Task ResetDatabaseByUsingRespawn()
         {
-            Db.Database.ExecuteSql($"DELETE FROM Enrolments");
-            Db.Database.ExecuteSql($"DELETE FROM Addresses");
-            Db.Database.ExecuteSql($"DELETE FROM Students");
+            await _respawner.ResetAsync(_dbConnection);
         }
     }
 }

@@ -3,11 +3,12 @@ using Students.Web.Services.Students.Dtos;
 
 namespace Students.IntegrationTests.Students.Services
 {
-    public class WhenCreatingStudent : IClassFixture<IntegrationTestFactory>
+    [Collection(TestCollections.SqlIntegration)]
+    public class WhenCreatingStudent : BaseIntegrationTest
     {
         private IStudentService _studentService;
 
-        public WhenCreatingStudent(IntegrationTestFactory factory)
+        public WhenCreatingStudent(IntegrationTestFactory factory): base(factory)
         {
             _studentService = new StudentService(factory.Db);
         }

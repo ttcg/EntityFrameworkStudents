@@ -3,7 +3,8 @@ using Students.Web.ViewModels;
 
 namespace Students.IntegrationTests.Students.Endpoints
 {
-    public class WhenGettingStudentById : BaseIntegrationTest, IClassFixture<IntegrationTestFactory>
+    [Collection(TestCollections.SqlIntegration)]
+    public class WhenGettingStudentById : BaseIntegrationTest
     {
         private Student _student1;
 

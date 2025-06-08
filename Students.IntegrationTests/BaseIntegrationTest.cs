@@ -1,11 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 using System.Text.Json;
+using Students.Repository;
 
 namespace Students.IntegrationTests
 {
-    public class BaseIntegrationTest
+    public class BaseIntegrationTest : IAsyncLifetime
     {
         protected HttpClient _client;
+        protected StudentsDbContext _db;
+        private Func<Task> _resetDatabase;
+        
 
         protected readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions()
         {
@@ -21,12 +25,21 @@ namespace Students.IntegrationTests
             return JsonSerializer.Deserialize<T>(responseBody, JsonSerializerOptions);
         }
 
+        public Task InitializeAsync()
+        {
+            return Task.CompletedTask;            
+        }
+
+        public Task DisposeAsync()
+        {
+            return _resetDatabase();
+        }
+
         public BaseIntegrationTest(IntegrationTestFactory factory)
         {
             _client = factory.CreateDefaultClient();
-            factory.ResetDatabase();
+            _resetDatabase = factory.ResetDatabaseByUsingRespawn;
+            _db = factory.Db;
         }
-
-
     }
 }
