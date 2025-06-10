@@ -2,7 +2,6 @@
 
 namespace Students.Repository.Models
 {
-    [Table("Addresses")]
     public class Address
     {
         public int AddressId { get; set; }

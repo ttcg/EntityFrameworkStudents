@@ -45,9 +45,11 @@ namespace Students.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            SeedStudents(modelBuilder);
-            SeedTeachers(modelBuilder);
-            SeedEnrolments(modelBuilder);
+            //SeedStudents(modelBuilder);
+            //SeedTeachers(modelBuilder);
+            //SeedEnrolments(modelBuilder);
+
+            modelBuilder.Entity<Address>().ToTable("Addresses");
         }
 
         private static void SeedStudents(ModelBuilder modelBuilder)

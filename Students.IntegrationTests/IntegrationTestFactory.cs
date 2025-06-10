@@ -27,7 +27,7 @@ namespace Students.IntegrationTests
                 services.AddDbContext<StudentsDbContext>((_, option) => option.UseSqlServer(connectionString));                
             });
 
-            builder.UseEnvironment("Development");
+            builder.UseEnvironment("Test");
 
             base.ConfigureWebHost(builder);
         }
