@@ -22,9 +22,6 @@ builder.Services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => schemaHelper.GetSchemaId(type));
 });
 
-
-var apiKey = builder.Configuration["SeedTestData"];
-
 builder.Services.AddDbContext<StudentsDbContext>(options =>
 {
     var connectionString = @"Server=(localdb)\mssqllocaldb;Database=EfCoreStudentsDb;Trusted_Connection=True;";
